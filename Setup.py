@@ -1,5 +1,6 @@
 import os
 import shutil
+import subprocess
 
 ROOT_DIR = os.path.dirname(__file__)
 
@@ -62,3 +63,4 @@ def unpack_zip_files(zip_files):
 if __name__ == '__main__':
     zipFiles = generate_zip_files()
     unpack_zip_files(zipFiles)
+    subprocess.call(r"C:\Program Files\Blender Foundation\Blender 4.4\blender-launcher.exe")

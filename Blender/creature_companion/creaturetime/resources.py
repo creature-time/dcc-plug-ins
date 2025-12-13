@@ -1,7 +1,7 @@
 
 import bpy
 import os
-from . import constants
+from creaturetime import constants
 
 _RESOURCES_DIR = os.path.join(constants.MAIN_DIR, "resources")
 _MAIN_RESOURCES = 'main'

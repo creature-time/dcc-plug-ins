@@ -1,10 +1,12 @@
+import numpy as np
 
 # Blender imports
 import bpy
 
 # CreatureTime imports
-from . import common
-from .. import resources
+from creaturetime import constants
+from creaturetime.operators import common
+from creaturetime import resources
 
 class _RemoveUnusedShapeKeys(bpy.types.Operator):
     """
@@ -12,7 +14,7 @@ class _RemoveUnusedShapeKeys(bpy.types.Operator):
     """
 
     bl_label = "Remove Unused Blend Shapes"
-    bl_idname = "creaturetime.remove_unused_blend_shapes"
+    bl_idname = constants.generate_id('remove_unused_blend_shapes')
     bl_description = "Delete Blend Shapes with no assigned weight of active object."
     bl_options = {'REGISTER', 'UNDO', 'INTERNAL'}
 
@@ -26,8 +28,6 @@ class _RemoveUnusedShapeKeys(bpy.types.Operator):
                 context.object.data.shape_keys.use_relative)
 
     def execute(self, context):
-        import numpy as np
-
         obj = context.object
 
         kbs = obj.data.shape_keys.key_blocks
@@ -212,19 +212,3 @@ def apply_operators(self, _):
     layout.operator(_ApplyShapeKeyAsBasis.bl_idname, icon_value=resources.get('default_white_x16').icon_id)
     layout.operator(_SelectAffectedShapeKeyVertices.bl_idname, icon_value=resources.get('default_white_x16').icon_id)
     layout.separator()
-
-
-def register():
-    bpy.utils.register_class(_RemoveUnusedShapeKeys)
-    bpy.utils.register_class(_ApplyShapeKeyAsBasis)
-    bpy.utils.register_class(_SelectAffectedShapeKeyVertices)
-
-    bpy.types.MESH_MT_shape_key_context_menu.prepend(apply_operators)
-
-
-def unregister():
-    bpy.types.MESH_MT_shape_key_context_menu.remove(apply_operators)
-
-    bpy.utils.unregister_class(_RemoveUnusedShapeKeys)
-    bpy.utils.unregister_class(_ApplyShapeKeyAsBasis)
-    bpy.utils.unregister_class(_SelectAffectedShapeKeyVertices)

@@ -2,10 +2,10 @@ schema_version = "1.0.0"
 
 # Example of manifest file for a Blender extension
 # Change the values according to your extension
-id = "creaturetime_tools"
+id = "creature_companion"
 version = "1.0.0"
-name = "CreatureTime Tools"
-tagline = "CreatureTime Tools"
+name = "Creature Companion"
+tagline = "Creature Companion"
 maintainer = "CreatureTime LLC <support@creaturetime.com>"
 # Supported types: "add-on", "theme"
 type = "add-on"

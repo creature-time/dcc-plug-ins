@@ -4,6 +4,7 @@
 
 # Setup Plug-ins Script
 !/Setup.py
+!.gitattributes
 
 # Blender Plug-ins
 !/[Bb]lender/
