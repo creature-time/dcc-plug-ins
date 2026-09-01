@@ -11,11 +11,11 @@ from creaturetime.operators.validations.validation import Validation
 
 @bpy.app.handlers.persistent
 def load_validations(*args, **kwargs):
-    wm = bpy.context.window_manager
-    wm.errors.clear()
-    wm.validations.clear()
+    scene = bpy.context.scene
+    scene.errors.clear()
+    scene.validations.clear()
     for idx, val in enumerate(operators.VALIDATIONS):
-        item = wm.validations.add()
+        item = scene.validations.add()
         item.name = val.NAME
         item.id = idx
         item.validate = True
@@ -54,24 +54,26 @@ def register():
     _discover_validations()
 
     # Set up validation properties
-    wm = bpy.types.WindowManager
-    wm.validations = bpy.props.CollectionProperty(type=props.CREATURETIME_Validation)
-    wm.validation_index = bpy.props.IntProperty(name='Active Validation Index')
-    wm.errors = bpy.props.CollectionProperty(type=props.CREATURETIME_Error)
-    wm.error_index = bpy.props.IntProperty(name='Active Error Index')
+    scene = bpy.types.Scene
+    scene.validations = bpy.props.CollectionProperty(type=props.CREATURETIME_Validation)
+    scene.validation_index = bpy.props.IntProperty(name='Active Validation Index')
+    scene.errors = bpy.props.CollectionProperty(type=props.CREATURETIME_Error)
+    scene.error_index = bpy.props.IntProperty(name='Active Error Index')
+
+    scene.vrc_avatar_context = bpy.props.PointerProperty(type=props.CREATURETIME_VrcAvatarContext)
 
     bpy.app.handlers.load_post.append(load_validations)
-    load_validations()
 
 
 def unregister():
     bpy.app.handlers.load_post.remove(load_validations)
 
     # Tear down scene properties
-    wm = bpy.types.WindowManager
-    del wm.validations
-    del wm.validation_index
-    del wm.errors
-    del wm.error_index
+    scene = bpy.types.Scene
+    del scene.validations
+    del scene.validation_index
+    del scene.errors
+    del scene.error_index
+    del scene.vrc_avatar_context
 
     operators.VALIDATIONS.clear()

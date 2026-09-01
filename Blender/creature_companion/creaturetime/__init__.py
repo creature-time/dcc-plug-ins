@@ -63,13 +63,10 @@ def register():
 
         relpath = os.path.relpath(root, creaturetime_dir).replace(os.sep, '.')
 
-        has_init = False
         if '__init__.py' in files:
             module_path = f'{root_module_path}.{relpath}'
             file_path = os.path.join(root, '__init__.py')
             inits.append((module_path, file_path))
-            # _register_classes(module_path, file_path)
-            # # has_init = True
             files.remove('__init__.py')
 
         for file in files:
@@ -77,11 +74,6 @@ def register():
             module_path = f'{root_module_path}.{relpath}.{basename}'
             file_path = os.path.join(root, file)
             _register_classes(module_path, file_path)
-
-        # if has_init:
-        #     module_path = f'{root_module_path}.{relpath}'
-        #     file_path = os.path.join(root, '__init__.py')
-        #     _register_classes(module_path, file_path)
 
 
     for cls in _context.registerable_objects:

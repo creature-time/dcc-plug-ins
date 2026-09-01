@@ -2,6 +2,7 @@ import bpy
 
 from creaturetime import resources
 from creaturetime.operators.common import Ct_Panel
+from creaturetime.operators.validations.operators import CREATURETIME_OT_ValidateAllActions
 
 
 class CREATURETIME_UL_Validations(bpy.types.UIList):
@@ -33,7 +34,7 @@ class VIEW3D_PT_Validator(Ct_Panel):
     bl_category = 'CreatureTime'
 
     def draw(self, context):
-        wm = bpy.context.window_manager
+        scene = bpy.context.scene
         layout = self.layout
 
         # Display validations.
@@ -42,8 +43,8 @@ class VIEW3D_PT_Validator(Ct_Panel):
         row = layout_validations.row()
         row.template_list(CREATURETIME_UL_Validations.__name__,
                           'validation_validations',
-                          wm, 'validations',
-                          wm, 'validation_index',
+                          scene, 'validations',
+                          scene, 'validation_index',
                           rows=5)
 
         from creaturetime.operators.validations import operators
@@ -60,8 +61,8 @@ class VIEW3D_PT_Validator(Ct_Panel):
         row = layout_results.row()
         row.template_list(CREATURETIME_UL_Errors.__name__,
                           'validation_errors',
-                          wm, 'errors',
-                          wm, 'error_index',
+                          scene, 'errors',
+                          scene, 'error_index',
                           rows=5)
 
         col = row.column(align=True)
@@ -71,3 +72,40 @@ class VIEW3D_PT_Validator(Ct_Panel):
         col.operator(operators.CREATURETIME_OT_RepairActions.bl_idname,
                      text="",
                      icon_value=resources.get('repair_x16').icon_id)
+
+
+class VIEW3D_PT_VrcAvatarContext(Ct_Panel):
+    """Vrc Avatar Context panel."""
+
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_label = 'Vrc Avatars'
+    bl_category = 'CreatureTime'
+    bl_order = 100
+    bl_options = {'DEFAULT_CLOSED'}
+
+    def draw(self, context):
+        scene = bpy.context.scene
+        layout = self.layout
+
+        # Display avatar settings.
+        layout_validation_context = self._create_section(layout, text='Vrc Avatars',
+                                                         icon_value=resources.get('default_white_x16').icon_id)
+
+        row = layout_validation_context.row()
+        row.prop(scene.vrc_avatar_context, 'is_avatar_release')
+
+        if scene.vrc_avatar_context.is_avatar_release:
+            row = layout_validation_context.row()
+            row.prop(scene.vrc_avatar_context, 'avatar_name', placeholder='Avatar name...')
+
+            row = layout_validation_context.row(align=True)
+            row.alignment = 'EXPAND'
+            row.label(text='Version')
+            row = row.row()
+            row.alignment = 'RIGHT'
+            row.prop(scene.vrc_avatar_context, 'version_major', text='')
+            row.label(text='.')
+            row.prop(scene.vrc_avatar_context, 'version_minor', text='')
+            row.label(text='.')
+            row.prop(scene.vrc_avatar_context, 'version_patch', text='')

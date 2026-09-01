@@ -33,23 +33,23 @@ class CREATURETIME_OT_ValidateAllActions(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        wm = bpy.context.window_manager
-        for item in wm.validations:
+        scene = bpy.context.scene
+        for item in scene.validations:
             if item.validate:
                 return True
         return False
 
     def invoke(self, context, event):
-        wm = bpy.context.window_manager
+        scene = bpy.context.scene
 
         # Clear out previous errors
-        wm.errors.clear()
+        scene.errors.clear()
 
-        for idx, item in enumerate(wm.validations):
+        for idx, item in enumerate(scene.validations):
             if not item.validate:
                 continue
             validation = VALIDATIONS[idx]
-            validate_item(context, wm, item, validation)
+            validate_item(context, scene, item, validation)
 
         return {"FINISHED"}
 
@@ -64,28 +64,28 @@ class CREATURETIME_OT_ValidateActions(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        wm = bpy.context.window_manager
+        scene = bpy.context.scene
         try:
-            wm.validations[wm.validation_index]
+            scene.validations[scene.validation_index]
         except IndexError:
             return False
         else:
             return True
 
     def invoke(self, context, event):
-        wm = bpy.context.window_manager
+        scene = bpy.context.scene
 
         try:
-            item = wm.validations[wm.validation_index]
+            item = scene.validations[scene.validation_index]
         except IndexError:
             pass
         else:
             # Clear out previous errors
-            wm.errors.clear()
+            scene.errors.clear()
 
             # Run Validation
             validation = VALIDATIONS[item.id]
-            validate_item(context, wm, item, validation)
+            validate_item(context, scene, item, validation)
 
         return {"FINISHED"}
 
@@ -100,17 +100,17 @@ class CREATURETIME_OT_RepairAllActions(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        wm = bpy.context.window_manager
-        for item in wm.errors:
+        scene = bpy.context.scene
+        for item in scene.errors:
             validation = VALIDATIONS[item.validation_id]
             if validation.has_repair(item.error_id):
                 return True
         return False
 
     def invoke(self, context, event):
-        wm = bpy.context.window_manager
+        scene = bpy.context.scene
         to_remove = []
-        for index, item in enumerate(wm.errors):
+        for index, item in enumerate(scene.errors):
             validation = VALIDATIONS[item.validation_id]
             if validation.has_repair(item.error_id):
                 if validation.repair(item.error_id):
@@ -119,7 +119,7 @@ class CREATURETIME_OT_RepairAllActions(bpy.types.Operator):
             index += 1
 
         for index in to_remove:
-            wm.errors.remove(index)
+            scene.errors.remove(index)
 
         return {"FINISHED"}
 
@@ -134,9 +134,9 @@ class CREATURETIME_OT_RepairActions(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        wm = bpy.context.window_manager
+        scene = bpy.context.scene
         try:
-            item = wm.errors[wm.error_index]
+            item = scene.errors[scene.error_index]
         except IndexError:
             return False
         else:
@@ -144,16 +144,16 @@ class CREATURETIME_OT_RepairActions(bpy.types.Operator):
             return validation.has_repair(item.error_id)
 
     def invoke(self, context, event):
-        wm = bpy.context.window_manager
+        scene = bpy.context.scene
         try:
-            item = wm.errors[wm.error_index]
+            item = scene.errors[scene.error_index]
         except IndexError:
             pass
         else:
             validation = VALIDATIONS[item.validation_id]
             if validation.has_repair(item.error_id):
                 if validation.repair(item.error_id):
-                    wm.errors.remove(wm.error_index)
+                    scene.errors.remove(scene.error_index)
                 else:
                     raise Exception('Failed to repair - %s' % item.name)
 

@@ -8,6 +8,8 @@ from creaturetime import constants
 from creaturetime.operators import common
 from creaturetime import resources
 
+from creaturetime.operators.avatar_tools import operators as avatar_tool_operators
+
 class _RemoveUnusedShapeKeys(bpy.types.Operator):
     """
     Delete Blend Shapes with no assigned weight of active object
@@ -148,7 +150,7 @@ class _ApplyShapeKeyAsBasis(bpy.types.Operator):
                 shapekey.relative_key = new_basis_shape_key
 
         # Repair important shape key order
-        common.sort_shape_keys(obj)
+        avatar_tool_operators.setup_default_shape_keys(obj, {})
 
         # Correctly apply the new basis as basis (important step, doesn't work otherwise)
         common.switch('EDIT')

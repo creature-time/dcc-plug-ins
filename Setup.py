@@ -58,9 +58,10 @@ def unpack_zip_files(zip_files):
         for src in zip_files:
             dst = os.path.join(extensions_dir, os.path.basename(src))
             shutil.unpack_archive(src, os.path.splitext(dst)[0], 'zip')
+            print(f"Installing blender plug-in (version={version}, src={src}).")
 
 
 if __name__ == '__main__':
     zipFiles = generate_zip_files()
     unpack_zip_files(zipFiles)
-    subprocess.call(r"C:\Program Files\Blender Foundation\Blender 4.4\blender-launcher.exe")
+    subprocess.call(r"C:\Program Files\Blender Foundation\Blender 5.2\blender-launcher.exe")
