@@ -3,7 +3,7 @@ schema_version = "1.0.0"
 # Example of manifest file for a Blender extension
 # Change the values according to your extension
 id = "creature_companion"
-version = "1.0.0"
+version = "1.0.2"
 name = "Creature Companion"
 tagline = "Creature Companion"
 maintainer = "CreatureTime LLC <support@creaturetime.com>"
