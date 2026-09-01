@@ -35,6 +35,7 @@ def unpack_zip_files(zip_files):
     # Find all installed blender versions to install extensions.
     blender_foundation_dir = f'%APPDATA%/Blender Foundation/Blender'
     blender_foundation_dir = os.path.expandvars(blender_foundation_dir)
+    version = None
     for version in os.listdir(blender_foundation_dir):
         # Check version directory.
         version_dir = os.path.join(blender_foundation_dir, version)
@@ -60,8 +61,10 @@ def unpack_zip_files(zip_files):
             shutil.unpack_archive(src, os.path.splitext(dst)[0], 'zip')
             print(f"Installing blender plug-in (version={version}, src={src}).")
 
+    return version
+
 
 if __name__ == '__main__':
     zipFiles = generate_zip_files()
-    unpack_zip_files(zipFiles)
-    subprocess.call(r"C:\Program Files\Blender Foundation\Blender 5.2\blender-launcher.exe")
+    latest_version = unpack_zip_files(zipFiles)
+    subprocess.call(rf'C:\Program Files\Blender Foundation\Blender {latest_version}\blender-launcher.exe')
