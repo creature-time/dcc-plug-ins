@@ -9,3 +9,6 @@
 # Blender Plug-ins
 !/[Bb]lender/
 /[Bb]lender/*.zip
+
+# Scripts
+!/[Ss]cripts/
